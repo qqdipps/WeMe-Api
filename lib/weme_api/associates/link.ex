@@ -14,6 +14,7 @@ defmodule WeMeApi.Associates.Link do
     link
     |> cast(attrs, [:user_id, :connection_id])
     |> validate_required([:user_id, :connection_id])
-    |> foreign_key_constraint([:user_id, :connection_id])
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:connection_id)
   end
 end

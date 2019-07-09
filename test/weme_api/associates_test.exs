@@ -33,19 +33,9 @@ defmodule WeMeApi.AssociatesTest do
       assert {:ok, %User{} = user} = Associates.create_user(@valid_attrs)
     end
 
-    test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Associates.create_user(@invalid_attrs)
-    end
-
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
       assert {:ok, %User{} = user} = Associates.update_user(user, @update_attrs)
-    end
-
-    test "update_user/2 with invalid data returns error changeset" do
-      user = user_fixture()
-      assert {:error, %Ecto.Changeset{}} = Associates.update_user(user, @invalid_attrs)
-      assert user == Associates.get_user!(user.id)
     end
 
     test "delete_user/1 deletes the user" do
@@ -90,19 +80,11 @@ defmodule WeMeApi.AssociatesTest do
       assert {:ok, %Connection{} = connection} = Associates.create_connection(@valid_attrs)
     end
 
-    test "create_connection/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Associates.create_connection(@invalid_attrs)
-    end
-
     test "update_connection/2 with valid data updates the connection" do
       connection = connection_fixture()
-      assert {:ok, %Connection{} = connection} = Associates.update_connection(connection, @update_attrs)
-    end
 
-    test "update_connection/2 with invalid data returns error changeset" do
-      connection = connection_fixture()
-      assert {:error, %Ecto.Changeset{}} = Associates.update_connection(connection, @invalid_attrs)
-      assert connection == Associates.get_connection!(connection.id)
+      assert {:ok, %Connection{} = connection} =
+               Associates.update_connection(connection, @update_attrs)
     end
 
     test "delete_connection/1 deletes the connection" do
@@ -120,14 +102,12 @@ defmodule WeMeApi.AssociatesTest do
   describe "links" do
     alias WeMeApi.Associates.Link
 
-    @valid_attrs %{}
     @update_attrs %{}
     @invalid_attrs %{}
 
     def link_fixture(attrs \\ %{}) do
       {:ok, link} =
-        attrs
-        |> Enum.into(@valid_attrs)
+        %{user_id: user_fixture().id, connection_id: connection_fixture().id}
         |> Associates.create_link()
 
       link
@@ -140,11 +120,16 @@ defmodule WeMeApi.AssociatesTest do
 
     test "get_link!/1 returns the link with given id" do
       link = link_fixture()
+      IO.inspect(link)
       assert Associates.get_link!(link.id) == link
     end
 
     test "create_link/1 with valid data creates a link" do
-      assert {:ok, %Link{} = link} = Associates.create_link(@valid_attrs)
+      link_valid_test =
+        %{user_id: user_fixture().id, connection_id: connection_fixture().id}
+        |> Associates.create_link()
+
+      assert {:ok, %Link{} = link} = link_valid_test
     end
 
     test "create_link/1 with invalid data returns error changeset" do
@@ -158,7 +143,7 @@ defmodule WeMeApi.AssociatesTest do
 
     test "update_link/2 with invalid data returns error changeset" do
       link = link_fixture()
-      assert {:error, %Ecto.Changeset{}} = Associates.update_link(link, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Associates.update_link(link, %{user_id: -1})
       assert link == Associates.get_link!(link.id)
     end
 
