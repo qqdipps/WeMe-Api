@@ -3,7 +3,6 @@ defmodule WeMeApi.User do
   import Ecto.Changeset
 
   schema "users" do
-
     timestamps()
   end
 

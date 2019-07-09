@@ -3,7 +3,6 @@ defmodule WeMeApi.Connection do
   import Ecto.Changeset
 
   schema "connections" do
-
     timestamps()
   end
 
