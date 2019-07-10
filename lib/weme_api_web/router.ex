@@ -9,5 +9,6 @@ defmodule WeMeApiWeb.Router do
     pipe_through(:api)
     resources("/users", UserController, only: [:create, :delete])
     resources("/connections", ConnectionController, only: [:create, :delete])
+    resources("/links", LinkController, except: [:new, :edit])
   end
 end
