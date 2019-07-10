@@ -8,6 +8,6 @@ defmodule WeMeApiWeb.Router do
   scope "/api", WeMeApiWeb do
     pipe_through(:api)
     resources("/users", UserController, only: [:create, :delete])
-    resources("/connections", ConnectionController, except: [:new, :edit])
+    resources("/connections", ConnectionController, only: [:create, :delete])
   end
 end
