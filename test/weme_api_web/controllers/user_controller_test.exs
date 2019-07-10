@@ -4,13 +4,8 @@ defmodule WeMeApiWeb.UserControllerTest do
   alias WeMeApi.Associates
   alias WeMeApi.Associates.User
 
-  @create_attrs %{
-
-  }
-  @update_attrs %{
-
-  }
-  @invalid_attrs %{}
+  @create_attrs %{}
+  @update_attrs %{}
 
   def fixture(:user) do
     {:ok, user} = Associates.create_user(@create_attrs)
@@ -39,11 +34,6 @@ defmodule WeMeApiWeb.UserControllerTest do
                "id" => id
              } = json_response(conn, 200)["data"]
     end
-
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
   end
 
   describe "update user" do
@@ -59,11 +49,6 @@ defmodule WeMeApiWeb.UserControllerTest do
                "id" => id
              } = json_response(conn, 200)["data"]
     end
-
-    test "renders errors when data is invalid", %{conn: conn, user: user} do
-      conn = put(conn, Routes.user_path(conn, :update, user), user: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
   end
 
   describe "delete user" do
@@ -73,9 +58,9 @@ defmodule WeMeApiWeb.UserControllerTest do
       conn = delete(conn, Routes.user_path(conn, :delete, user))
       assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
+      assert_error_sent(404, fn ->
         get(conn, Routes.user_path(conn, :show, user))
-      end
+      end)
     end
   end
 
