@@ -12,14 +12,8 @@ defmodule WeMeApiWeb.LinkController do
     with {:ok, %Link{} = link} <- Associates.create_link(link_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.link_path(conn, :show, link))
       |> render("show.json", link: link)
     end
-  end
-
-  def show(conn, %{"id" => id}) do
-    link = Associates.get_link!(id)
-    render(conn, "show.json", link: link)
   end
 
   def delete(conn, %{"id" => id}) do

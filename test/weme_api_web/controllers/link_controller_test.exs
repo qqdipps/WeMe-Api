@@ -1,11 +1,11 @@
 defmodule WeMeApiWeb.LinkControllerTest do
   use WeMeApiWeb.ConnCase
+  import Ecto.Query
 
   alias WeMeApi.Associates
-  alias WeMeApi.Associates.Link
+  alias Associates.Link
+  alias WeMeApi.Repo
 
-  @create_attrs %{}
-  @update_attrs %{}
   @invalid_attrs %{user_id: -1, connection_id: -2}
 
   def user_fixture() do
@@ -20,7 +20,7 @@ defmodule WeMeApiWeb.LinkControllerTest do
 
   def fixture(:link) do
     {:ok, link} =
-      Associates.create_link(%{user_id: user_fixture.id, connection_id: connection_fixture.id})
+      Associates.create_link(%{user_id: user_fixture().id, connection_id: connection_fixture().id})
 
     link
   end
@@ -33,15 +33,16 @@ defmodule WeMeApiWeb.LinkControllerTest do
     test "renders link when data is valid", %{conn: conn} do
       conn =
         post(conn, Routes.link_path(conn, :create),
-          link: %{user_id: user_fixture.id, connection_id: connection_fixture.id}
+          link: %{user_id: user_fixture().id, connection_id: connection_fixture().id}
         )
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
-      conn = get(conn, Routes.link_path(conn, :show, id))
+
+      last_link_record = from(l in Link, limit: 1, order_by: [desc: l.inserted_at]) |> Repo.one()
 
       assert %{
                "id" => id
-             } = json_response(conn, 200)["data"]
+             } = %{"id" => last_link_record.id}
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -54,12 +55,20 @@ defmodule WeMeApiWeb.LinkControllerTest do
     setup [:create_link]
 
     test "deletes chosen link", %{conn: conn, link: link} do
+      link_to_delete =
+        from(l in Link, where: l.id == ^link.id)
+        |> Repo.one()
+
+      assert link_to_delete == link
       conn = delete(conn, Routes.link_path(conn, :delete, link))
       assert response(conn, 204)
 
-      assert_error_sent(404, fn ->
-        get(conn, Routes.link_path(conn, :show, link))
-      end)
+      link_deleted? =
+        nil ==
+          from(l in Link, where: l.id == ^link.id)
+          |> Repo.one()
+
+      assert link_deleted? == true
     end
   end
 
