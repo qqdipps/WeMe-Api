@@ -1,8 +1,10 @@
 defmodule WeMeApiWeb.UserControllerTest do
   use WeMeApiWeb.ConnCase
+  import Ecto.Query
 
   alias WeMeApi.Associates
-  alias WeMeApi.Associates.User
+  alias WeMeApi.Repo
+  alias Associates.User
 
   @create_attrs %{}
   @update_attrs %{}
@@ -16,38 +18,15 @@ defmodule WeMeApiWeb.UserControllerTest do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  describe "index" do
-    test "lists all users", %{conn: conn} do
-      conn = get(conn, Routes.user_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
-    end
-  end
-
   describe "create user" do
     test "renders user when data is valid", %{conn: conn} do
       conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
-
-      conn = get(conn, Routes.user_path(conn, :show, id))
-
-      assert %{
-               "id" => id
-             } = json_response(conn, 200)["data"]
-    end
-  end
-
-  describe "update user" do
-    setup [:create_user]
-
-    test "renders user when data is valid", %{conn: conn, user: %User{id: id} = user} do
-      conn = put(conn, Routes.user_path(conn, :update, user), user: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get(conn, Routes.user_path(conn, :show, id))
+      last_user_record = from(d in User, limit: 1, order_by: [desc: d.inserted_at]) |> Repo.one()
 
       assert %{
                "id" => id
-             } = json_response(conn, 200)["data"]
+             } = %{"id" => last_user_record.id}
     end
   end
 
@@ -55,12 +34,20 @@ defmodule WeMeApiWeb.UserControllerTest do
     setup [:create_user]
 
     test "deletes chosen user", %{conn: conn, user: user} do
+      user_to_delete =
+        from(u in User, where: u.id == ^user.id)
+        |> Repo.one()
+
+      assert user_to_delete == user
       conn = delete(conn, Routes.user_path(conn, :delete, user))
       assert response(conn, 204)
 
-      assert_error_sent(404, fn ->
-        get(conn, Routes.user_path(conn, :show, user))
-      end)
+      user_deleted? =
+        nil ==
+          from(u in User, where: u.id == ^user.id)
+          |> Repo.one()
+
+      assert user_deleted? == true
     end
   end
 
