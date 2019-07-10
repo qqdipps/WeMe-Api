@@ -7,6 +7,8 @@ defmodule WeMeApiWeb.UserController do
   action_fallback(WeMeApiWeb.FallbackController)
 
   def create(conn, %{"user" => user_params}) do
+    IO.inspect(user_params)
+
     with {:ok, %User{} = user} <- Associates.create_user(user_params) do
       conn
       |> put_status(:created)
