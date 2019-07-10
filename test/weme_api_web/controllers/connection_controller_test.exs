@@ -35,12 +35,20 @@ defmodule WeMeApiWeb.ConnectionControllerTest do
     setup [:create_connection]
 
     test "deletes chosen connection", %{conn: conn, connection: connection} do
+      connection_to_delete =
+        from(c in Connection, where: c.id == ^connection.id)
+        |> Repo.one()
+
+      assert connection_to_delete == connection
       conn = delete(conn, Routes.connection_path(conn, :delete, connection))
       assert response(conn, 204)
 
-      assert_error_sent(404, fn ->
-        get(conn, Routes.connection_path(conn, :show, connection))
-      end)
+      connection_deleted? =
+        nil ==
+          from(c in Connection, where: c.id == ^connection.id)
+          |> Repo.one()
+
+      assert connection_deleted? == true
     end
   end
 
