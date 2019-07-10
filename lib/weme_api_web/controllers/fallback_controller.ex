@@ -19,4 +19,11 @@ defmodule WeMeApiWeb.FallbackController do
     |> put_view(WeMeApiWeb.ErrorView)
     |> render(:"400")
   end
+
+  def call(conn, _whatever) do
+    conn
+    |> put_status(:internal_server_error)
+    |> put_view(WeMeApiWeb.ErrorView)
+    |> render(:"500")
+  end
 end

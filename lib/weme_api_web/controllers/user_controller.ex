@@ -7,12 +7,21 @@ defmodule WeMeApiWeb.UserController do
   action_fallback(WeMeApiWeb.FallbackController)
 
   def create(conn, %{"user" => user_params}) do
-    IO.inspect(user_params)
-
     with {:ok, %User{} = user} <- Associates.create_user(user_params) do
-      conn
-      |> put_status(:created)
-      |> render("show.json", user: user)
+      if user_params["setup"] == true do
+        {:ok, connection} = Associates.create_connection()
+        {:ok, link} = Associates.create_link(%{connection_id: connection.id, user_id: user.id})
+
+        if(connection && link) do
+          conn
+          |> put_status(:created)
+          |> render("setup.json", %{user: user, connection: connection})
+        end
+      else
+        conn
+        |> put_status(:created)
+        |> render("show.json", user: user)
+      end
     end
   end
 

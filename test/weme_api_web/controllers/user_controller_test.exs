@@ -43,12 +43,19 @@ defmodule WeMeApiWeb.UserControllerTest do
         fn list -> assert length(list) == 0 end
       )
 
-      conn = post(conn, Routes.user_path(conn, :create), user: @setup_attrs)
+      post(conn, Routes.user_path(conn, :create), user: @setup_attrs)
 
       Enum.each(
         get_all_list(),
         fn list -> assert length(list) == 1 end
       )
+    end
+
+    test "On setup: true renders JSON with user_id and connection_id", %{conn: conn} do
+      conn = post(conn, Routes.user_path(conn, :create), user: @setup_attrs)
+
+      assert %{"connection_id" => connection_id, "user_id" => user_id} =
+               json_response(conn, 201)["data"]
     end
   end
 
