@@ -7,8 +7,6 @@ defmodule WeMeApiWeb.LinkController do
   action_fallback(WeMeApiWeb.FallbackController)
 
   def create(conn, %{"link" => link_params}) do
-    new_link = Associates.create_link(link_params)
-
     with {:ok, %Link{} = link} <- Associates.create_link(link_params) do
       conn
       |> put_status(:created)
