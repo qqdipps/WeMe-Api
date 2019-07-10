@@ -12,4 +12,11 @@ defmodule WeMeApiWeb.FallbackController do
     |> put_view(WeMeApiWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, _whatever}) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(WeMeApiWeb.ErrorView)
+    |> render(:"400")
+  end
 end

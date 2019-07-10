@@ -4,14 +4,11 @@ defmodule WeMeApiWeb.LinkController do
   alias WeMeApi.Associates
   alias WeMeApi.Associates.Link
 
-  action_fallback WeMeApiWeb.FallbackController
-
-  def index(conn, _params) do
-    links = Associates.list_links()
-    render(conn, "index.json", links: links)
-  end
+  action_fallback(WeMeApiWeb.FallbackController)
 
   def create(conn, %{"link" => link_params}) do
+    new_link = Associates.create_link(link_params)
+
     with {:ok, %Link{} = link} <- Associates.create_link(link_params) do
       conn
       |> put_status(:created)
@@ -23,14 +20,6 @@ defmodule WeMeApiWeb.LinkController do
   def show(conn, %{"id" => id}) do
     link = Associates.get_link!(id)
     render(conn, "show.json", link: link)
-  end
-
-  def update(conn, %{"id" => id, "link" => link_params}) do
-    link = Associates.get_link!(id)
-
-    with {:ok, %Link{} = link} <- Associates.update_link(link, link_params) do
-      render(conn, "show.json", link: link)
-    end
   end
 
   def delete(conn, %{"id" => id}) do

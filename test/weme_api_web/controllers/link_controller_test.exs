@@ -4,16 +4,24 @@ defmodule WeMeApiWeb.LinkControllerTest do
   alias WeMeApi.Associates
   alias WeMeApi.Associates.Link
 
-  @create_attrs %{
+  @create_attrs %{}
+  @update_attrs %{}
+  @invalid_attrs %{user_id: -1, connection_id: -2}
 
-  }
-  @update_attrs %{
+  def user_fixture() do
+    {:ok, user} = Associates.create_user()
+    user
+  end
 
-  }
-  @invalid_attrs %{}
+  def connection_fixture() do
+    {:ok, connection} = Associates.create_connection()
+    connection
+  end
 
   def fixture(:link) do
-    {:ok, link} = Associates.create_link(@create_attrs)
+    {:ok, link} =
+      Associates.create_link(%{user_id: user_fixture.id, connection_id: connection_fixture.id})
+
     link
   end
 
@@ -21,18 +29,14 @@ defmodule WeMeApiWeb.LinkControllerTest do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  describe "index" do
-    test "lists all links", %{conn: conn} do
-      conn = get(conn, Routes.link_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
-    end
-  end
-
   describe "create link" do
     test "renders link when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.link_path(conn, :create), link: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      conn =
+        post(conn, Routes.link_path(conn, :create),
+          link: %{user_id: user_fixture.id, connection_id: connection_fixture.id}
+        )
 
+      assert %{"id" => id} = json_response(conn, 201)["data"]
       conn = get(conn, Routes.link_path(conn, :show, id))
 
       assert %{
@@ -42,27 +46,7 @@ defmodule WeMeApiWeb.LinkControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.link_path(conn, :create), link: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
-  describe "update link" do
-    setup [:create_link]
-
-    test "renders link when data is valid", %{conn: conn, link: %Link{id: id} = link} do
-      conn = put(conn, Routes.link_path(conn, :update, link), link: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get(conn, Routes.link_path(conn, :show, id))
-
-      assert %{
-               "id" => id
-             } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, link: link} do
-      conn = put(conn, Routes.link_path(conn, :update, link), link: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
+      assert json_response(conn, 400)["errors"] == %{"detail" => "Bad Request"}
     end
   end
 
@@ -73,9 +57,9 @@ defmodule WeMeApiWeb.LinkControllerTest do
       conn = delete(conn, Routes.link_path(conn, :delete, link))
       assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
+      assert_error_sent(404, fn ->
         get(conn, Routes.link_path(conn, :show, link))
-      end
+      end)
     end
   end
 
