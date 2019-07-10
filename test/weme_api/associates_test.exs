@@ -105,7 +105,7 @@ defmodule WeMeApi.AssociatesTest do
     @update_attrs %{}
     @invalid_attrs %{}
 
-    def link_fixture(attrs \\ %{}) do
+    def link_fixture(_attrs \\ %{}) do
       {:ok, link} =
         %{user_id: user_fixture().id, connection_id: connection_fixture().id}
         |> Associates.create_link()
@@ -120,7 +120,6 @@ defmodule WeMeApi.AssociatesTest do
 
     test "get_link!/1 returns the link with given id" do
       link = link_fixture()
-      IO.inspect(link)
       assert Associates.get_link!(link.id) == link
     end
 

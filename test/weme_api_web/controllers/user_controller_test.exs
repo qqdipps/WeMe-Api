@@ -7,7 +7,6 @@ defmodule WeMeApiWeb.UserControllerTest do
   alias Associates.User
 
   @create_attrs %{}
-  @update_attrs %{}
 
   def fixture(:user) do
     {:ok, user} = Associates.create_user(@create_attrs)
