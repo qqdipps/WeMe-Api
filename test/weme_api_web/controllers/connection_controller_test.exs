@@ -1,12 +1,12 @@
 defmodule WeMeApiWeb.ConnectionControllerTest do
   use WeMeApiWeb.ConnCase
+  import Ecto.Query
 
   alias WeMeApi.Associates
-  alias WeMeApi.Associates.Connection
+  alias Associates.Connection
+  alias WeMeApi.Repo
 
   @create_attrs %{}
-  @update_attrs %{}
-  @invalid_attrs %{}
 
   def fixture(:connection) do
     {:ok, connection} = Associates.create_connection(@create_attrs)
@@ -17,43 +17,17 @@ defmodule WeMeApiWeb.ConnectionControllerTest do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  describe "index" do
-    test "lists all connections", %{conn: conn} do
-      conn = get(conn, Routes.connection_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
-    end
-  end
-
   describe "create connection" do
     test "renders connection when data is valid", %{conn: conn} do
       conn = post(conn, Routes.connection_path(conn, :create), connection: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.connection_path(conn, :show, id))
+      last_connection_record =
+        from(c in Connection, limit: 1, order_by: [desc: c.inserted_at]) |> Repo.one()
 
       assert %{
                "id" => id
-             } = json_response(conn, 200)["data"]
-    end
-  end
-
-  describe "update connection" do
-    setup [:create_connection]
-
-    test "renders connection when data is valid", %{
-      conn: conn,
-      connection: %Connection{id: id} = connection
-    } do
-      conn =
-        put(conn, Routes.connection_path(conn, :update, connection), connection: @update_attrs)
-
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get(conn, Routes.connection_path(conn, :show, id))
-
-      assert %{
-               "id" => id
-             } = json_response(conn, 200)["data"]
+             } = %{"id" => last_connection_record.id}
     end
   end
 
