@@ -1,7 +1,7 @@
 defmodule WeMeApiWeb.BeamChannel do
   use WeMeApiWeb, :channel
 
-  def join("beam:lobby", payload, socket) do
+  def join(_beam, payload, socket) do
     if authorized?(payload) do
       {:ok, socket}
     else
@@ -18,7 +18,7 @@ defmodule WeMeApiWeb.BeamChannel do
   # It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (beam:lobby).
   def handle_in("shout", payload, socket) do
-    broadcast socket, "shout", payload
+    broadcast(socket, "shout", payload)
     {:noreply, socket}
   end
 
