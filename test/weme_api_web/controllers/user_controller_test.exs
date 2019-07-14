@@ -54,7 +54,7 @@ defmodule WeMeApiWeb.UserControllerTest do
     test "On setup: true renders JSON with user_id and connection_id", %{conn: conn} do
       conn = post(conn, Routes.user_path(conn, :create), user: @setup_attrs)
 
-      assert %{"connection_id" => connection_id, "user_id" => user_id} =
+      assert %{"connection_id" => connection_id, "user_id" => user_id, "link_id" => link_id} =
                json_response(conn, 201)["data"]
     end
   end
