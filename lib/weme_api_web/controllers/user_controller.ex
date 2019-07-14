@@ -15,7 +15,7 @@ defmodule WeMeApiWeb.UserController do
         if(connection && link) do
           conn
           |> put_status(:created)
-          |> render("setup.json", %{user: user, connection: connection})
+          |> render("setup.json", %{user: user, connection: connection, link: link})
         end
       else
         conn
