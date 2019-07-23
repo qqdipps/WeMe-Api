@@ -11,19 +11,24 @@ use Mix.Config
 # before starting your production server.
 config :weme_api, WeMeApiWeb.Endpoint,
   load_from_system_env: true,
-  http: [port: {:system, "PORT"}], # Needed for Phoenix 1.2 and 1.4. Doesn't hurt for 1.3.
-  server: true, # Without this line, your app will not start the web server!
+  # Needed for Phoenix 1.2 and 1.4. Doesn't hurt for 1.3.
+  http: [port: {:system, "PORT"}],
+  # Without this line, your app will not start the web server!
+  server: true,
   secret_key_base: "${SECRET_KEY_BASE}",
   url: [host: "${APP_NAME}.gigalixirapp.com", port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
-
-  config :weme_api WeMeApi.Repo,
+config :weme_api, WeMeApi.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: "${DATABASE_URL}",
   database: "",
-  ssl: true,
-  pool_size: 2 # Free tier db only allows 4 connections. Rolling deploys need pool_size*(n+1) connections.
+  # ssl: true,
+  # ssl_opts: [
+  #   versions: [:"tlsv1.2"]
+  # ],
+  # Free tier db only allows 4 connections. Rolling deploys need pool_size*(n+1) connections.
+  pool_size: 2
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -32,17 +37,6 @@ config :logger, level: :info
 #
 # To get SSL working, you will need to add the `https` key
 # to the previous section and set your `:url` port to 443:
-#
-#     config :weme_api, WeMeApiWeb.Endpoint,
-#       ...
-#       url: [host: "example.com", port: 443],
-#       https: [
-#         :inet6,
-#         port: 443,
-#         cipher_suite: :strong,
-#         keyfile: System.get_env("SOME_APP_SSL_KEY_PATH"),
-#         certfile: System.get_env("SOME_APP_SSL_CERT_PATH")
-#       ]
 #
 # The `cipher_suite` is set to `:strong` to support only the
 # latest and more secure SSL ciphers. This means old browsers
