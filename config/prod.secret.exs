@@ -5,7 +5,7 @@
 use Mix.Config
 
 database_url =
-  "ecto://postgres:postgres@localhost/weme_api_dev" ||
+  "ecto://96bd6682-f2d7-44dc-8c10-3d634a01e1fc-user:pw-9de7751c-e8aa-494d-a2cc-4bbd3089d20b@postgres-free-tier-1.gigalixir.com:5432/96bd6682-f2d7-44dc-8c10-3d634a01e1fc" ||
     raise """
     environment variable DATABASE_URL is missing.
     For example: ecto://USER:PASS@HOST/DATABASE
@@ -17,7 +17,7 @@ config :weme_api, WeMeApi.Repo,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
 secret_key_base =
-  System.get_env(" c") ||
+  "GGsk2KTPce8GyoezjCdDVmqxRofnrUBqI8aZ0GLqUiwovlDYZxCx+V/QkuXHgH1z" ||
     raise """
     environment variable SECRET_KEY_BASE is missing.
     You can generate one by calling: mix phx.gen.secret
