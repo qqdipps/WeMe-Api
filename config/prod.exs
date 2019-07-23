@@ -23,7 +23,7 @@ config :weme_api, WeMeApi.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: "${DATABASE_URL}",
   database: "",
-  # ssl: true,
+  ssl: true,
   # ssl_opts: [
   #   versions: [:"tlsv1.2"]
   # ],
