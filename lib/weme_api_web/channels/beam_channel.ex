@@ -22,6 +22,11 @@ defmodule WeMeApiWeb.BeamChannel do
     {:noreply, socket}
   end
 
+  def handle_in("register", payload, socket) do
+    broadcast(socket, "register", payload)
+    {:noreply, socket}
+  end
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true
