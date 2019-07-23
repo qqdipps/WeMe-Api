@@ -12,7 +12,7 @@ database_url =
     """
 
 config :weme_api, WeMeApi.Repo,
-  # ssl: true,
+  ssl: true,
   url: database_url,
   pool_size: "2"
 
