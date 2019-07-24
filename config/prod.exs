@@ -15,15 +15,16 @@ config :weme_api, WeMeApiWeb.Endpoint,
   http: [port: {:system, "PORT"}],
   # Without this line, your app will not start the web server!
   server: true,
-  secret_key_base: "${SECRET_KEY_BASE}",
-  url: [host: "${APP_NAME}.gigalixirapp.com", port: 443]
+  secret_key_base: "GGsk2KTPce8GyoezjCdDVmqxRofnrUBqI8aZ0GLqUiwovlDYZxCx+V/QkuXHgH1z",
+  url: [host: "wemeapi.gigalixirapp.com", port: 443]
 
 # cache_static_manifest: "priv/static/cache_manifest.json"
 
 config :weme_api, WeMeApi.Repo,
   adapter: Ecto.Adapters.Postgres,
-  url: "${DATABASE_URL}",
-  database: "",
+  url:
+    "ecto://96bd6682-f2d7-44dc-8c10-3d634a01e1fc-user:pw-9de7751c-e8aa-494d-a2cc-4bbd3089d20b@postgres-free-tier-1.gigalixir.com:5432/96bd6682-f2d7-44dc-8c10-3d634a01e1fc",
+  database: "96bd6682-f2d7-44dc-8c10-3d634a01e1fc",
   ssl: true,
   # ssl_opts: [
   #   versions: [:"tlsv1.2"]
@@ -48,7 +49,7 @@ config :logger, level: :info
 # and cert in disk or a relative path inside priv, for example
 # "priv/ssl/server.key". For all supported SSL configuration
 # options, see https://hexdocs.pm/plug/Plug.SSL.html#configure/1
-#
+# ç
 # We also recommend setting `force_ssl` in your endpoint, ensuring
 # no data is ever sent via http, always redirecting to https:
 #
