@@ -14,7 +14,7 @@ database_url =
 config :weme_api, WeMeApi.Repo,
   ssl: true,
   url: database_url,
-  pool_size: "2"
+  pool_size: 2
 
 secret_key_base =
   "GGsk2KTPce8GyoezjCdDVmqxRofnrUBqI8aZ0GLqUiwovlDYZxCx+V/QkuXHgH1z" ||
