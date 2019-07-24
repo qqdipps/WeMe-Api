@@ -12,7 +12,7 @@ use Mix.Config
 config :weme_api, WeMeApiWeb.Endpoint,
   load_from_system_env: true,
   # Needed for Phoenix 1.2 and 1.4. Doesn't hurt for 1.3.
-  http: [port: {:system, "PORT"}],
+  http: [port: 4000],
   # Without this line, your app will not start the web server!
   server: true,
   secret_key_base: "GGsk2KTPce8GyoezjCdDVmqxRofnrUBqI8aZ0GLqUiwovlDYZxCx+V/QkuXHgH1z",
