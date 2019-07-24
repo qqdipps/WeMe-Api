@@ -16,8 +16,9 @@ config :weme_api, WeMeApiWeb.Endpoint,
   # Without this line, your app will not start the web server!
   server: true,
   secret_key_base: "${SECRET_KEY_BASE}",
-  url: [host: "${APP_NAME}.gigalixirapp.com", port: 443],
-  # cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: "${APP_NAME}.gigalixirapp.com", port: 443]
+
+# cache_static_manifest: "priv/static/cache_manifest.json"
 
 config :weme_api, WeMeApi.Repo,
   adapter: Ecto.Adapters.Postgres,
