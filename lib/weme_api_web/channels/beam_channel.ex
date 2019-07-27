@@ -33,7 +33,8 @@ defmodule WeMeApiWeb.BeamChannel do
   end
 
   # Add authorization logic here as required.
-  defp authorized?(_payload) do
+  defp authorized?(payload) do
+    IO.puts(payload)
     true
   end
 end
