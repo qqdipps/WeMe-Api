@@ -16,7 +16,7 @@ defmodule WeMeApiWeb.BeamChannel do
   end
 
   # It is also common to receive messages from the client and
-  # broadcast to everyone in the current topic (beam:lobby).
+  # broadcast to everyone in the current topic (beam:connectionId).
   def handle_in("shout", payload, socket) do
     broadcast(socket, "shout", payload)
     {:noreply, socket}
@@ -24,6 +24,11 @@ defmodule WeMeApiWeb.BeamChannel do
 
   def handle_in("register", payload, socket) do
     broadcast(socket, "register", payload)
+    {:noreply, socket}
+  end
+
+  def handle_in("disconnect", payload, socket) do
+    broadcast(socket, "disconnect", payload)
     {:noreply, socket}
   end
 
