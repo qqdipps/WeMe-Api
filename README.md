@@ -7,6 +7,7 @@ Elixir API for handling connections and messages for WeMe App.
 To run this project, you will need to install the following dependencies on your system:
 
 * [Elixir](https://elixir-lang.org/install.html)
+* [Erlang/OTP 20.0 ](https://elixir-lang.org/install.html#installing-erlang)
 * [Phoenix](https://hexdocs.pm/phoenix/installation.html)
 * [PostgreSQL](https://www.postgresql.org/download/macosx/)
 
