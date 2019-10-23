@@ -13,7 +13,6 @@ To run this project, you will need to install the following dependencies on your
 To get started, run the following commands in your project folder:
 
 ```shell
-cp config/dev.exs.example config/dev.exs  # creates the project's configuration file
 mix deps.get  # installs the dependencies
 mix ecto.create  # creates the database.
 mix ecto.migrate  # run the database migrations.
